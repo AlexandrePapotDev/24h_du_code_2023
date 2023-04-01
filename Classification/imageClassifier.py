@@ -16,7 +16,12 @@ model  = ViTForImageClassification.from_pretrained(checkpoint)
 
 def predictClass(img_path):
     image = Image.open(img_path)
+
+    if image.mode == 'RGBA':
+        background = Image.new('RGB', image.size, (255, 255, 255)).convert('RGBA')
+        image = Image.alpha_composite(background, image).convert('RGB')
     inputs = image_processor(images=image, return_tensors="pt")
+
     outputs = model(**inputs)
     logits = outputs.logits
 
