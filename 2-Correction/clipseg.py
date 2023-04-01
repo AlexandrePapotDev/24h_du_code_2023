@@ -7,7 +7,7 @@ import torch
 processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
 model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
 
-def create_mask(image_path, prompt, threshold=0.5):
+def create_mask(image_path, prompt, threshold):
     # Load the input image
     image = Image.open(image_path)
 
@@ -37,4 +37,4 @@ def create_mask(image_path, prompt, threshold=0.5):
 
     return mask_image
 
-create_mask("image.jpg", "a car").save("mask.jpg")
+#create_mask("porsche-911.jpg", "sponsor",0.1).save("mask.jpg")
