@@ -1,35 +1,42 @@
 from transformers import CLIPSegProcessor, CLIPSegForImageSegmentation
-
-processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
-model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
-
 from PIL import Image
 import requests
 import numpy as np
-
-image = Image.open("image.jpg")
-image
-
-prompts = ["car","grass"]
-
 import torch
+from scipy.ndimage import filters
 
+# Load the CLIPSeg model and processor
+processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
+model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
+
+# Load the input image
+image = Image.open("image.jpg")
+
+# Define the prompts and set up the inputs for the model
+prompts = ["car","grass"]
 inputs = processor(text=prompts, images=[image] * len(prompts), padding="max_length", return_tensors="pt")
-# predict
+
+# Make predictions with the model
 with torch.no_grad():
-  outputs = model(**inputs)
+    outputs = model(**inputs)
 preds = outputs.logits.unsqueeze(1)
 
-import matplotlib.pyplot as plt
+# Set the threshold for the mask
+threshold = 0.5
 
+# Loop over the images and compute the mask for each one
 for i, prompt in enumerate(prompts):
-    # Convert the image data to a PIL Image object
-    image_data = torch.sigmoid(preds[i][0]).cpu().numpy() * 255
-    image_data = image_data.astype(np.uint8)
-    image = Image.fromarray(image_data)
+    # Compute the segmentation probabilities for the current image
+    probs = torch.sigmoid(preds[i][0]).cpu().numpy()
 
-    # Set up the filename for the output image
-    filename = f"output_{i}.jpg"
+    # Threshold the probabilities to obtain the mask
+    mask = (probs >= threshold).astype(np.uint8)
 
-    # Save the image to a file in JPEG format
-    image.save(filename)
+    # Resize the mask to match the size of the input image
+    mask_image = Image.fromarray(mask * 255).resize(image.size)
+
+    # Set up the filename for the output mask
+    filename = f"mask_{i}.jpg"
+
+    # Save the mask to a file in JPEG format
+    mask_image.save(filename)
