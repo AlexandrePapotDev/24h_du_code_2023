@@ -1,10 +1,12 @@
+import glob
 import numpy as np
 from PIL import Image
 import tensorflow as tf
-import tensorflow_hub as hub
+# import tensorflow_hub as hub
 
 model = tf.saved_model.load('../models/fnst')
-#tf.saved_model.save(style_transfer_model, './models/fnst')
+# tf.saved_model.save(style_transfer_model, './models/fnst')
+
 
 def perform_style_transfer(content_path, style_path, output_path):
     
@@ -21,8 +23,9 @@ def perform_style_transfer(content_path, style_path, output_path):
     Image.fromarray(stylized_image).save(output_path)
 
 
-#content_path = 'examples/input.jpg'
-#style_path = 'examples/style.jpg'
-#output_path = 'examples/result.jpg'
+nb_files = len(glob.glob("./output/*"))
+output_path = 'output/result'+str(nb_files+1)+'.jpg'
 
-#perform_style_transfer(content_path, style_path, output_path)
+# content_path = 'input/input.jpg'
+# style_path = 'input/style_anime.jpg'
+# perform_style_transfer(content_path, style_path, output_path)
