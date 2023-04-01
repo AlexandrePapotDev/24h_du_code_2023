@@ -3,12 +3,13 @@ from PIL import Image
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from Stylisation.styling import perform_style_transfer
+from Stylisation.styling import perform_style_transfer, image_from_prompt
 from Classification.imageClassifier import predictClass
+import glob
 
 content_path = '../Stylisation/input/'
 style_path = '../Stylisation/input/'
-output_path = '../Stylisation/output/'
+output_path = 'output/'
 
 
 # if current_page.txt does not exist, create it and write "Classification" in it
@@ -48,38 +49,61 @@ def page2():
 
 # Define the function to display the content for page 3
 def page3():
+    show_button = False
     st.title("Stylisation")
     image1 = False
     image2 = False
     name_image1 = None
     name_image2 = None
     def show_button():
-        if(st.button("Fusionner!")):
-            perform_style_transfer(content_path+name_image1, style_path+name_image2, output_path+"output_"+name_image1)
+        if(st.button("Générer une image à partir d'un filtre")):
+            perform_style_transfer(content_path+name_image1, style_path+name_image2)
             # load image at output_path+"output_"+name_image1
-            image = Image.open(output_path+"output_"+name_image1)
+            nb_files = len(glob.glob("./output/*"))
+            name_image = "result"+str(nb_files)+'.jpg'
+            image = Image.open(output_path+name_image)
             st.image(image, caption="Image stylisée")
-            
-            
-    uploaded_file = st.file_uploader("Choisissez une image...", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image")
-        print(uploaded_file)
-        image.save(content_path+uploaded_file.name)
-        name_image1 = uploaded_file.name
-        image1 = True
-        if(image2):
-            show_button()
-    uploaded_file2 = st.file_uploader("Choisissez un filtre...", type=["jpg", "jpeg", "png"])
-    if uploaded_file2 is not None:
-        image = Image.open(uploaded_file2)
-        st.image(image, caption="Uploaded Image")
-        image.save(content_path+uploaded_file2.name)
-        name_image2 = uploaded_file2.name
-        image2 = True
-        if(image1):
-            show_button()
+    # make a text input
+    textinput = st.text_input("Entrez un prompt", "")
+    if(len(textinput)>0 and image1):
+        button_prompt = st.button("Générer une image à partir du prompt")
+        if(button_prompt):
+            # generate image
+            image_from_prompt(textinput, image1)
+            nb_files = len(glob.glob("./output/*"))
+            name_image = "result"+str(nb_files)+'.jpg'
+            image = Image.open(output_path+name_image)
+            st.image(image, caption="Image stylisée")
+
+    col1, col2 = st.columns(2)
+    with col1:        
+        uploaded_file = st.file_uploader("Choisissez une image...", type=["jpg", "jpeg", "png"])
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Image")
+            image.save(content_path+uploaded_file.name)
+            name_image1 = uploaded_file.name
+            image1 = True
+
+    with col2:
+        uploaded_file2 = st.file_uploader("Choisissez un filtre...", type=["jpg", "jpeg", "png"])
+        if uploaded_file2 is not None:
+            image = Image.open(uploaded_file2)
+            st.image(image, caption="Uploaded Image")
+            image.save(content_path+uploaded_file2.name)
+            name_image2 = uploaded_file2.name
+            image2 = True
+    if(len(textinput)>0 and image1):
+        button_prompt = st.button("Générer une image à partir du prompt")
+        if(button_prompt):
+            # generate image
+            image_from_prompt(textinput, image1)
+            nb_files = len(glob.glob("./output/*"))
+            name_image = "result"+str(nb_files)+'.jpg'
+            image = Image.open(output_path+name_image)
+            st.image(image, caption="Image stylisée")
+    if(image2 and image1):
+        show_button()
 
   
 # Define the layout of the app

@@ -7,7 +7,7 @@ import torch
 
 def image_from_prompt(path, prompt):
 
-    pipe = torch.load("./models/text2style.pt")
+    pipe = torch.load("../models/text2style.pt")
 
     image = Image.open(path).convert("RGB")
 
@@ -38,8 +38,37 @@ def perform_style_transfer(content_path, style_path):
 
     model = tf.saved_model.load('../models/fnst')
 
-    content_image = np.array(Image.open(content_path).convert('RGB'))
-    style_image = np.array(Image.open(style_path).convert('RGB'))
+    image = Image.open(content_path).convert('RGB')
+
+    max_size = 750
+    width, height = image.size
+    if width > max_size or height > max_size:
+        if width > height:
+            new_width = max_size
+            new_height = int(height * (max_size / width))
+        else:
+            new_height = max_size
+            new_width = int(width * (max_size / height))
+        new_size = (new_width, new_height)
+        image = image.resize(new_size)
+
+    content_image = np.array(image)
+
+    image = Image.open(style_path).convert('RGB')
+
+    max_size = 750
+    width, height = image.size
+    if width > max_size or height > max_size:
+        if width > height:
+            new_width = max_size
+            new_height = int(height * (max_size / width))
+        else:
+            new_height = max_size
+            new_width = int(width * (max_size / height))
+        new_size = (new_width, new_height)
+        image = image.resize(new_size)
+
+    style_image = np.array(image)
 
     content_image = tf.convert_to_tensor(content_image, np.float32)[tf.newaxis, ...] / 255.
     style_image = tf.convert_to_tensor(style_image, np.float32)[tf.newaxis, ...] / 255.
