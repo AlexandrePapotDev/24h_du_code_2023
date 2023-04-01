@@ -1,33 +1,27 @@
 from transformers import CLIPSegProcessor, CLIPSegForImageSegmentation
 from PIL import Image
-import requests
 import numpy as np
 import torch
-from scipy.ndimage import filters
 
 # Load the CLIPSeg model and processor
 processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
 model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
 
-# Load the input image
-image = Image.open("image.jpg")
+def create_mask(image_path, prompt, threshold=0.5):
+    # Load the input image
+    image = Image.open(image_path)
 
-# Define the prompts and set up the inputs for the model
-prompts = ["car","grass"]
-inputs = processor(text=prompts, images=[image] * len(prompts), padding="max_length", return_tensors="pt")
+    # Define the prompts and set up the inputs for the model
+    prompts = [prompt]
+    inputs = processor(text=prompts, images=[image] * len(prompts), padding="max_length", return_tensors="pt")
 
-# Make predictions with the model
-with torch.no_grad():
-    outputs = model(**inputs)
-preds = outputs.logits.unsqueeze(1)
+    # Make predictions with the model
+    with torch.no_grad():
+        outputs = model(**inputs)
+    preds = outputs.logits.unsqueeze(0).unsqueeze(1)
 
-# Set the threshold for the mask
-threshold = 0.5
-
-# Loop over the images and compute the mask for each one
-for i, prompt in enumerate(prompts):
-    # Compute the segmentation probabilities for the current image
-    probs = torch.sigmoid(preds[i][0]).cpu().numpy()
+    # Compute the segmentation probabilities for the image
+    probs = torch.sigmoid(preds[0][0]).cpu().numpy()
 
     # Threshold the probabilities to obtain the mask
     mask = (probs >= threshold).astype(np.uint8)
@@ -36,7 +30,11 @@ for i, prompt in enumerate(prompts):
     mask_image = Image.fromarray(mask * 255).resize(image.size)
 
     # Set up the filename for the output mask
-    filename = f"mask_{i}.jpg"
+    filename = f"mask.jpg"
 
     # Save the mask to a file in JPEG format
     mask_image.save(filename)
+
+    return mask_image
+
+create_mask("image.jpg", "a car").save("mask.jpg")
