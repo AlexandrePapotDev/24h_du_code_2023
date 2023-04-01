@@ -14,14 +14,14 @@ To evaluate your success we will pass your classifier on an evaluation dataset t
 
 ## Method
 
-* Predict class for one image (Perfect,Retouch or Useless)
+* Predict class for one image (Perfect,Retouch or Useless) based on accuracy
     * *img_path*     => Add the path of your image in png or jpg
 
 ```
 predictClass(img_path)
 ```
 
-* Predict class for one image
+* Classify the test photos 
     * *input_directory*     => Add the path of your test folder
 ```
 evaluate_classifier(input_directory)
