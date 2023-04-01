@@ -11,6 +11,11 @@ style_path = '../Stylisation/input/'
 output_path = '../Stylisation/output/'
 
 
+# if current_page.txt does not exist, create it and write "Classification" in it
+if not os.path.exists("current_page.txt"):
+    with open("current_page.txt", "w") as f:
+        f.write("Classification")
+
 # write actual page name to corrent_page.txt
 def setPage(page):
     with open("current_page.txt", "w") as f:
