@@ -8,7 +8,7 @@ import torch
 def image_from_prompt(path, prompt):
 
     pipe = torch.load("../models/text2style.pt")
-
+    print(path)
     image = Image.open(path).convert("RGB")
 
     max_size = 750

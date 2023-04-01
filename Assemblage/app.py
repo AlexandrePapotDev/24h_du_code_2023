@@ -87,15 +87,6 @@ def page3():
             st.image(image, caption="Image stylisée")
     # make a text input
     textinput = st.text_input("Entrez un prompt", "")
-    if(len(textinput)>0 and image1):
-        button_prompt = st.button("Générer une image à partir du prompt")
-        if(button_prompt):
-            # generate image
-            image_from_prompt(textinput, image1)
-            nb_files = len(glob.glob("./output/*"))
-            name_image = "result"+str(nb_files)+'.jpg'
-            image = Image.open(output_path+name_image)
-            st.image(image, caption="Image stylisée")
 
     col1, col2 = st.columns(2)
     with col1:        
@@ -116,11 +107,12 @@ def page3():
             image.save(content_path+uploaded_file2.name)
             name_image2 = uploaded_file2.name
             image2 = True
-    if(len(textinput)>0 and image1):
+
+    if len(textinput)>0 and image1:
         button_prompt = st.button("Générer une image à partir du prompt")
         if(button_prompt):
             # generate image
-            image_from_prompt( object_img1, textinput)
+            image_from_prompt(content_path+name_image1, textinput)
             nb_files = len(glob.glob("./output/*"))
             name_image = "result"+str(nb_files)+'.jpg'
             image = Image.open(output_path+name_image)
