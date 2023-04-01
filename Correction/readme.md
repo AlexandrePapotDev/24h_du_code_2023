@@ -6,11 +6,11 @@ Among the received photos you now have some very interesting photos but that nee
 
 With a first model of AI, you will propose to a user to describe in text what he wants to select in an image and thus produce a mask in black and white of the part of the photo to be corrected (in white the part to be modified, in black the part not concerned).
 
-![alt text](https://imgur.com/AA7dBrd)
+![picture1part2](https://user-images.githubusercontent.com/48018775/229306638-b76eeee9-7092-4461-b181-9e8f63a96ce8.png)
 
 With a second AI model, you will allow the user to describe the modification he wants to make on the photo and using the previous mask. This will produce a corrected image.
 
-![alt text](https://imgur.com/v1kqn4u)
+![picture2part2](https://user-images.githubusercontent.com/48018775/229306639-04885a02-a88d-4eed-95f6-ea377b0a747b.png)
 
 To evaluate your program, we will ask you to start from the “porsche-911.jpg” image in the evaluation dataset in part 1, in the “retouch” classification. Indeed an advertisement is far too visible, you must delete it with this new tool and demonstrate it to us.
 
