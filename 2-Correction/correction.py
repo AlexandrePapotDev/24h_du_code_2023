@@ -3,14 +3,14 @@ from diffusers import StableDiffusionInpaintPipeline
 from PIL import Image
 import torch, numpy as np
 
-# Replace a promt from orignal image with a new prompt
+# Replace a promt from original image with a new prompt
 def correction(image_path, prompt_mask, prompt_inpaint, threshold):
 
     # Load the CLIPSeg model and processor
     processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
     model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
 
-    # Load the StableDiffusion model (float32 costs less time than float64 and works on cpu)
+    # Load the StableDiffusion model (float32 cost less time than float64 and work on cpu)
     pipeline = StableDiffusionInpaintPipeline.from_pretrained("stabilityai/stable-diffusion-2-inpainting",torch_dtype=torch.float32)
 
     # Set the device to CPU
