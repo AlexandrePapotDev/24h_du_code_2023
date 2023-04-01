@@ -1,4 +1,4 @@
-# Parts 2 - Correct Photos
+# Part 2 - Correct Photos
 
 ## Description
 
