@@ -61,5 +61,5 @@ def correction(image_path, prompt_mask, prompt_inpaint, threshold):
     return mask_image, image
 
 # Smoke test
-if __name__ == "__main__":
-    correction("porsche-911.jpg", "sponsor", "wall", 0.1)
+#if __name__ == "__main__":
+#    correction("porsche-911.jpg", "sponsor", "wall", 0.1)

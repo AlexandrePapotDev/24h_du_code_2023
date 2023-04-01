@@ -5,6 +5,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from Stylisation.styling import perform_style_transfer, image_from_prompt
 from Classification.imageClassifier import predictClass
+from Correction.correction import correction
 import glob
 
 content_path = '../Stylisation/input/'
@@ -46,6 +47,26 @@ def page1():
 # Define the function to display the content for page 2
 def page2():
     st.title("Correction")
+    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1,1])
+    text_input1 = ""
+    text_input2 = ""
+    with col1:
+        st.write("Replace")
+    with col2:
+        text_input1 = st.text_input("")
+    with col3:
+        st.write("by")
+    with col4:
+        text_input2 = st.text_input(" ")
+    with col5:
+        st.write("in image")
+    image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    st.write("Replace " + text_input1 + " by " + text_input2 + " in image")
+    if image_file is not None:
+        st.image(image_file, use_column_width=True)
+    if image_file is not None and text_input1 != "" and text_input2 != "":
+        correction(image_file, text_input1, text_input2, 0.1)
+
 
 # Define the function to display the content for page 3
 def page3():
@@ -55,6 +76,7 @@ def page3():
     image2 = False
     name_image1 = None
     name_image2 = None
+    object_img1 = None
     def show_button():
         if(st.button("Générer une image à partir d'un filtre")):
             perform_style_transfer(content_path+name_image1, style_path+name_image2)
@@ -84,6 +106,7 @@ def page3():
             image.save(content_path+uploaded_file.name)
             name_image1 = uploaded_file.name
             image1 = True
+            object_img1 = image
 
     with col2:
         uploaded_file2 = st.file_uploader("Choisissez un filtre...", type=["jpg", "jpeg", "png"])
@@ -97,7 +120,7 @@ def page3():
         button_prompt = st.button("Générer une image à partir du prompt")
         if(button_prompt):
             # generate image
-            image_from_prompt(textinput, image1)
+            image_from_prompt( object_img1, textinput)
             nb_files = len(glob.glob("./output/*"))
             name_image = "result"+str(nb_files)+'.jpg'
             image = Image.open(output_path+name_image)
