@@ -4,6 +4,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from Stylisation.styling import perform_style_transfer
+from Classification.imageClassifier import predictClass
 
 content_path = '../Stylisation/input/'
 style_path = '../Stylisation/input/'
@@ -26,10 +27,16 @@ def page1():
     uploaded_file = st.file_uploader("Choisissez une image...", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="Image uploadée")
+        col1, col2 = st.columns(2)
+        image.save(content_path+uploaded_file.name)
+        classe = predictClass(content_path+uploaded_file.name)
+        with col2:
+            st.write("La classe prédite est: "+classe)
+
+        with col1:
+            st.image(image, caption="Image uploadée", use_column_width=True)
         # save image to input folder
-
-
+        
 # Define the function to display the content for page 2
 def page2():
     st.title("Correction")
