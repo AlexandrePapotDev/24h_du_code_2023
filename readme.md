@@ -23,10 +23,20 @@
 
 ## Table of contents
 <ol>
+  <li><a href="#parts">Parts Info</a></li>
   <li><a href="#requirement">Requirement</a></li>
   <li><a href="#app-description">App description</a></li>
   <li><a href="#launching">Launching</a></li>
 </ol>
+
+<!-- PARTS INFO-->
+## Parts Info
+- Part 1 : Classification
+- Part 2 : Correction
+- Part 3 : Stylisation
+- Part 4 : Assemblage
+- Part 5 : Storytelling
+- Annex : models
   
 <!-- REQUiREMENT -->
 ## Requirement
