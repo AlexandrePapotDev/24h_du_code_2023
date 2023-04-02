@@ -4,7 +4,7 @@ from PIL import Image
 import torch, numpy as np
 
 # Replace a promt from original image with a new prompt
-def correction(image_path, prompt_mask, prompt_inpaint, threshold):
+def correction(img_obj, prompt_mask, prompt_inpaint, threshold):
 
     # Load the CLIPSeg model and processor
     processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
@@ -20,7 +20,7 @@ def correction(image_path, prompt_mask, prompt_inpaint, threshold):
     random_number = np.random.randint(0, 1000000000)
 
     # Load the input image
-    image = Image.open(image_path)
+    image = Image.open(img_obj)
 
     # Keep the original size of the image
     original_size = image.size
@@ -53,10 +53,10 @@ def correction(image_path, prompt_mask, prompt_inpaint, threshold):
     mask_image, image = mask_image.resize(original_size), image.resize(original_size)
     
     # Set up the filename for the output mask and add a random number
-    filename_mask,filename_image = f"mask_{random_number}.jpg", f"image_{random_number}.jpg"
+    filename_mask,filename_image = f"mask_"+img_obj.name+".jpg", f"image_"+img_obj.name+".jpg"
 
     # Save the mask to a file in JPEG format
-    mask_image.save(filename_mask), image.save(filename_image)
+    mask_image.save("output/"+filename_mask), image.save("output/"+filename_image)
 
     return mask_image, image
 

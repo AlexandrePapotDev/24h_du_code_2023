@@ -7,6 +7,12 @@ from Stylisation.styling import perform_style_transfer, image_from_prompt
 from Classification.imageClassifier import predictClass
 from Correction.correction import correction
 import glob
+import tkinter as tk
+from collections import defaultdict
+
+root = tk.Tk()
+root.withdraw()
+root.wm_attributes('-topmost', 1)
 
 content_path = '../Stylisation/input/'
 style_path = '../Stylisation/input/'
@@ -29,7 +35,7 @@ def getPage():
 
 
 # Define the function to display the content for page 1
-def page1():
+def Classification():
     st.title("Classification")
     uploaded_file = st.file_uploader("Choisissez une image...", type=["jpg", "jpeg", "png"])
     if uploaded_file is not None:
@@ -42,10 +48,51 @@ def page1():
 
         with col1:
             st.image(image, caption="Image uploadée", use_column_width=True)
-        # save image to input folder
+    # Upload a folder of images
+    image_files = st.file_uploader("Upload one or more image files", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+
+    if image_files:
+        # Create a dictionary to store the paths of the output folders for each class
+        class_folders = {}
+        class_images = defaultdict(list)
+
+        output_dir = os.path.join(os.getcwd(), "classification")
+
+        os.makedirs(output_dir, exist_ok=True)
+        # Loop through each uploaded file
+        for file in image_files:
+            # Get the name and content of the uploaded file
+            file_name = file.name
+            file_content = file.read()
+
+            # Write the content of the uploaded file to a temporary file
+            temp_file = os.path.join(os.getcwd(), file_name)
+            with open(temp_file, "wb") as f:
+                f.write(file_content)
+
+            # Predict the class of the image
+            predicted_class = predictClass(temp_file)
+
+            # Create the output folder if it doesn't exist
+            if predicted_class not in class_folders:
+                class_folders[predicted_class] = os.path.join(output_dir, predicted_class)
+                os.makedirs(class_folders[predicted_class], exist_ok=True)
+
+            # Move the image to the output folder
+            output_path = os.path.join(class_folders[predicted_class], file_name)
+            os.rename(temp_file, output_path)
+
+            # Add the path of the image to the dictionary to display it later sorted by class
+            class_images[predicted_class].append(output_path)
+
+        st.warning('Vos images sont dans: '+os.getcwd())
+        for class_name, images in class_images.items():
+            st.write("Class:", class_name)
+            for image_path in images:
+                st.image(image_path)
         
 # Define the function to display the content for page 2
-def page2():
+def Correction():
     st.title("Correction")
     col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1,1])
     text_input1 = ""
@@ -65,11 +112,13 @@ def page2():
     if image_file is not None:
         st.image(image_file, use_column_width=True)
     if image_file is not None and text_input1 != "" and text_input2 != "":
+        #print("image_file.name: ", image_file.name)
         correction(image_file, text_input1, text_input2, 0.1)
+        st.image("output/"+image_file.name)
 
 
 # Define the function to display the content for page 3
-def page3():
+def Stylisation():
     show_button = False
     st.title("Stylisation")
     image1 = False
@@ -158,9 +207,9 @@ if stylisation_button:
 
 # Display the selected page
 if current_page == "Classification":
-    page1()
+    Classification()
 elif current_page == "Correction":
-    page2()
+    Correction()
 else:
-    page3()
+    Stylisation()
 
