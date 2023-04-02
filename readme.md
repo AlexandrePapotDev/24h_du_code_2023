@@ -42,7 +42,7 @@
 ## Requirement
 
 - Python 3.8
-- Pytorch, PIL, Streamlit
+- see requirements.txt
 
 <!-- ABOUT THE APP -->
 ## App description
