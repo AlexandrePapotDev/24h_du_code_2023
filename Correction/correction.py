@@ -53,7 +53,7 @@ def correction(img_obj, prompt_mask, prompt_inpaint, threshold):
     mask_image, image = mask_image.resize(original_size), image.resize(original_size)
     
     # Set up the filename for the output mask and add a random number
-    filename_mask,filename_image = f"mask_"+img_obj.name+".jpg", f"image_"+img_obj.name+".jpg"
+    filename_mask,filename_image = f"mask_"+img_obj.name, f"image_"+img_obj.name
 
     # Save the mask to a file in JPEG format
     mask_image.save("output/"+filename_mask), image.save("output/"+filename_image)
