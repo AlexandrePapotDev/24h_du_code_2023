@@ -110,7 +110,8 @@ def Correction():
     if image_file is not None and text_input1 != "" and text_input2 != "":
         #print("image_file.name: ", image_file.name)
         correction(image_file, text_input1, text_input2, 0.1)
-        st.image("output/"+image_file.name)
+        st.image("output/mask_"+image_file.name)
+        st.image("output/image_"+image_file.name)
 
 
 # Define the function to display the content for page 3
