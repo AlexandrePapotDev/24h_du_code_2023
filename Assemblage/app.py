@@ -7,12 +7,7 @@ from Stylisation.styling import perform_style_transfer, image_from_prompt
 from Classification.imageClassifier import predictClass
 from Correction.correction import correction
 import glob
-import tkinter as tk
 from collections import defaultdict
-
-root = tk.Tk()
-root.withdraw()
-root.wm_attributes('-topmost', 1)
 
 content_path = '../Stylisation/input/'
 style_path = '../Stylisation/input/'
