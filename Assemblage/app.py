@@ -33,17 +33,7 @@ def getPage():
 # Define the function to display the content for page 1
 def Classification():
     st.title("Classification")
-    uploaded_file = st.file_uploader("Choisissez une image...", type=["jpg", "jpeg", "png"])
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        col1, col2 = st.columns(2)
-        image.save(content_path+uploaded_file.name)
-        classe = predictClass(content_path+uploaded_file.name)
-        with col2:
-            st.write("La classe prédite est: "+classe)
 
-        with col1:
-            st.image(image, caption="Image uploadée", use_column_width=True)
     # Upload a folder of images
     image_files = st.file_uploader("Upload one or more image files", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
@@ -81,7 +71,7 @@ def Classification():
             # Add the path of the image to the dictionary to display it later sorted by class
             class_images[predicted_class].append(output_path)
 
-        st.warning('Vos images sont dans: '+os.getcwd())
+        st.warning('Vos images sont dans: '+os.getcwd()+"/classification")
         for class_name, images in class_images.items():
             st.write("Class:", class_name)
             for image_path in images:
