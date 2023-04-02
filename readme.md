@@ -7,7 +7,7 @@
 
 ## TEAM : APES TOGETHER STRONG 
 
-<img src="https://i.kym-cdn.com/entries/icons/mobile/000/032/196/apes.jpg" alt="banner" width="200"/>
+<img src="https://i.kym-cdn.com/entries/icons/mobile/000/032/196/apes.jpg" alt="banner" width="1000"/>
 
 ## About the project
  It is a challenge, for you, passionate about programming, in the family of coding parties and hackathons. You are welcome to take up the challenge of your choice in 24 hours, with your team.
