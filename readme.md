@@ -7,8 +7,7 @@
 
 ## Launching application:
 
-- cd 24h_du_code_2023/Assemblage
-- streamlit run app.py
+- ./start.sh
 
 ## What does it do:
 

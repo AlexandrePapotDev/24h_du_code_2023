@@ -14,6 +14,7 @@ style_path = '../Stylisation/input/'
 output_path = 'output/'
 
 
+
 # if current_page.txt does not exist, create it and write "Classification" in it
 if not os.path.exists("current_page.txt"):
     with open("current_page.txt", "w") as f:
@@ -175,6 +176,12 @@ st.markdown(
     .block-container {
         padding-top: 20px;
     }
+    section[data-testid="stSidebar"]{
+        width:0 !important;
+    }
+    section[data-testid="stSidebar"] button[kind="secondary"]{
+        width:100%!important;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -199,12 +206,7 @@ if correction_button:
 if stylisation_button:
     current_page = "Stylisation"
     setPage("Stylisation")
+# show current page
+locals()[current_page]()
 
-# Display the selected page
-if current_page == "Classification":
-    Classification()
-elif current_page == "Correction":
-    Correction()
-else:
-    Stylisation()
 
